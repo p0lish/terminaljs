@@ -16,6 +16,7 @@ help = (t) => {
   t.print(`
     <pre>
     ${Object.keys(t.functions).sort()}
+    ${Object.keys(window).sort()}
     </pre>
   `);
 };
@@ -24,12 +25,19 @@ wget = (t, param) => {
   t.print(param);
 };
 
+weather = (t, location = "") => {
+  fetch(`http://wttr.in/${location}?format=3`)
+    .then((res) => res.text())
+    .then((data) => t.print(data));
+};
+
 terminalfunctions = {
   clear: clear,
   cls: clear,
   date: date,
   help: help,
   wget: wget,
+  weather: weather,
 };
 
 // Initial config

@@ -40,6 +40,9 @@ body {
 
 pre {
   margin-left: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  text-align: justify;
 }
 
 a {
