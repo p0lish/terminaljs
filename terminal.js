@@ -2,6 +2,8 @@
 
 cursors = ["▮", "▯", "▕", "▌", "▁", "░", "▒", "█"];
 
+window.terminalvars = {};
+
 clear = (t) => {
   t.displayelem.innerHTML = "";
   t.pastbuff = t.prompt;
@@ -16,35 +18,44 @@ help = (t) => {
   t.print(`
     <pre>
     ${Object.keys(t.functions).sort()}
-    ${Object.keys(window).sort()}
     </pre>
   `);
 };
 
-wget = (t, param) => {
-  t.print(param);
+getIP = (json) => {
+  console.log("json", json);
+  window.myip_const = json.ip;
+  window.terminalvars.ip = json.ip;
+  t.print(json.ip);
+};
+
+whatismyip = (t) => {
+  const s = document.createElement("script");
+  s.src = "https://api.ipify.org/?format=jsonp&callback=getIP";
+  document.body.appendChild(s);
+  document.body.removeChild(s);
 };
 
 weather = (t, location = "") => {
-  fetch(`http://wttr.in/${location}?format=3`)
+  fetch(`http://wttr.in/${location}?format=4`)
     .then((res) => res.text())
     .then((data) => t.print(data));
 };
 
 terminalfunctions = {
-  clear: clear,
+  clear,
   cls: clear,
-  date: date,
-  help: help,
-  wget: wget,
-  weather: weather,
+  date,
+  help,
+  weather,
+  whatismyip,
 };
 
 // Initial config
 const config = {
   terminal: "#display",
   input: "#input",
-  prompt: "<b class='prompt'>p0lish:~$ </b>",
+  prompt: "<b class='prompt'>root:~$ </b>",
   cursor: cursors[3],
   cursorspeed: 10,
   unknown_command_text: "Unknown command",
@@ -181,9 +192,9 @@ class Terminal {
 
   initBanner = () => {
     this.print(`<pre>
-    Basic retro look terminal emulator written in js, and also a brief resume about me.
+    Basic retro look terminal emulator written in js.
 
-    type 'help' for more information
+    type 'help' for commands
     </pre>`);
   };
 
